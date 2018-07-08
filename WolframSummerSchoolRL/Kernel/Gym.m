@@ -8,6 +8,7 @@ RLEnvironmentCreate[name_] := CatchFailure @ Scope[
 	If[FailureQ[session], Return @ $Failed];
 
 	safeEE[session, "import gym"];
+	safeEE[session, "import gym.spaces"];
 
 	comm = "env = gym.make(\"" <> name <> "\")";
 	safeEE[session, comm];
@@ -27,7 +28,7 @@ RLEnvironmentClose[RLEnvironment["Gym", id_, _]] := CatchFailure @ Scope[
 	safeEE[getState[id], "env.close()"];
 	DeleteObject[state];
 	(* remove key *)
-	$Environments = KeyDropFrom[$Environments, id];
+	KeyDropFrom[$Environments, id];
 ]
 
 (*----------------------------------------------------------------------------*)
@@ -56,8 +57,10 @@ RLEnvironmentStep[RLEnvironment["Gym", id_, _], action_, render_:False] := Catch
 ]
 
 (*----------------------------------------------------------------------------*)
-RLEnvironmentRandomAction[RLEnvironment["Gym", id_, _]] :=  
+RLEnvironmentSampleAction[RLEnvironment["Gym", id_, _]] :=  
 	CatchFailure @ safeEE[getState[id], "env.action_space.sample()"]
 
-
+(*----------------------------------------------------------------------------*)
+RLEnvironmentRender[RLEnvironment["Gym", id_, _]] :=  
+	CatchFailure @ safeEE[getState[id], "env.render()"]
 

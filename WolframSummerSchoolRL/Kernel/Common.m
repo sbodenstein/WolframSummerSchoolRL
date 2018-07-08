@@ -68,6 +68,7 @@ RLEnvironmentReset[RLEnvironment[$$]] resets the state of the environment and \
 returns an initial observation.
 "]
 
+(*----------------------------------------------------------------------------*)
 PackageExport["RLEnvironmentStep"]
 SetUsage["
 RLEnvironmentStep[RLEnvironment[$$], act$] steps through an environment using \
@@ -77,9 +78,25 @@ RLEnvironmentStep[GymEnvironmentObject[id$], act$, render$] displays the current
 of the environment. 
 "]
 
-PackageExport["RLEnvironmentRandomAction"]
+RLEnvironmentStep::done = "This Environment in Done, no more steps possible."
+RLEnvironmentStep::invact = "The action `` is invalid."
+
+(*----------------------------------------------------------------------------*)
+PackageExport["RLEnvironmentSampleAction"]
 SetUsage["
-RLEnvironmentRandomAction[RLEnvironment[$$]] returns a sampled action from the \
+RLEnvironmentSampleAction[RLEnvironment[$$]] returns a sampled action from the \
 environments action space.
 "]
 
+(*----------------------------------------------------------------------------*)
+PackageExport["RLEnvironmentRender"]
+SetUsage["
+RLEnvironmentRender[RLEnvironment[$$]] renders the environment.
+"]
+
+(*----------------------------------------------------------------------------*)
+PackageScope["RLEnvironmentStateSet"]
+SetUsage["
+RLEnvironmentStateSet[RLEnvironment[$$], state$] sets the state. This is an 
+internal function.
+"]
