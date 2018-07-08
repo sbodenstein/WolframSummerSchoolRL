@@ -5,6 +5,12 @@ PackageImport["GeneralUtilities`"]
 (*----------------------------------------------------------------------------*)
 PackageExport["PlayRandomAgent"]
 
+SetUsage["
+PlayRandomAgent[RLEnvironment[$$]] uses a random agent to play an environment, \
+returning an Association with the rewards, actions and states.
+PlayRandomAgent[RLEnvironment[$$], render$] renders the environment as an image \
+during play."]
+
 PlayRandomAgent[env_, render_:False] := Scope[
 	first = RLEnvironmentReset[env];
 	done = False;
