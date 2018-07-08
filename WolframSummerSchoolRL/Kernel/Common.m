@@ -38,7 +38,12 @@ getState[id_] :=
 PackageScope["safeEE"]
 
 safeEE[session_, command_] := Scope[
-	out = ExternalEvaluate[session, command];
+	(* Block: from docs of ExternalEvaluate, 
+		"Individual write operations to standard output are immediately printed 
+		to the notebook or terminal." 
+		Some operations keep printing warning messages
+	*)
+	out = Block[{Print}, ExternalEvaluate[session, command]];
 	If[Failure @ out, ThrowFailure[]];
 	out
 ]
