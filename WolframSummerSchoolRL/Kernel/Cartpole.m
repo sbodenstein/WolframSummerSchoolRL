@@ -49,7 +49,7 @@ CatchFailureAsMessage @ Scope[
 	$Environments[id] = <|"State" -> newState, "Done" -> done|>;
 
 	out = <|"Observation" -> newState, "Done" -> done, "Reward" -> 1|>;
-	If[render, out["Render"] = cartRender[newState]];
+	If[render, out["Rendering"] = cartRender[newState]];
 	out
 ]
 
@@ -145,7 +145,9 @@ cartRender[{x_, xdot_, t_, tdot_}] := Module[
 	Graphics[{
 		line, cart, Blue, pole, 
 		Red, hinge
-	}]
+		}, 
+		PlotRange -> {{-maxX, maxX}*1.3, {-0.3, polelen*1.2}}
+	]
 ]
 
 (* testing code to ensure this implementation matches openai gym *)
