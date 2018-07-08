@@ -147,3 +147,18 @@ cartRender[{x_, xdot_, t_, tdot_}] := Module[
 		Red, hinge
 	}]
 ]
+
+(* testing code to ensure this implementation matches openai gym *)
+PackageScope["testCartpole"]
+testCartpole[] := Scope[
+	a = PlayRandomAgent[$env];
+	WolframSummerSchoolRL`PackageScope`RLEnvironmentStateSet[
+		$wenv,<|"State" -> a["InitialObservation"],"Done"->False|>
+	];
+	wolf = PlayListActionAgent[$wenv, a["Actions"]];
+	
+	test1 = (Total@a["Rewards"] == Total@wolf["Rewards"]);
+	test2 = (Max[Abs[a["Observations"] - wolf["Observations"]]] < 0.001);
+	test3 = (wolf["Done"] == True);
+	VectorQ[{test1, test2, test3}, TrueQ]
+]
