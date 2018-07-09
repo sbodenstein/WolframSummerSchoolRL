@@ -3,8 +3,16 @@ Package["WolframSummerSchoolRL`"]
 PackageImport["GeneralUtilities`"]
 
 (*----------------------------------------------------------------------------*)
-RLEnvironmentCreate[name_] := CatchFailure @ Scope[
-	session = StartExternalSession["Python"];
+Options[RLEnvironmentCreate] = {
+	"Executable" -> Automatic
+}
+
+RLEnvironmentCreate[name_, opts:OptionsPattern[]] := CatchFailure @ Scope[
+	UnpackOptions[executable];
+	sessInfo = <|"System" -> "Python"|>;
+	If[executable =!= Automatic, sessInfo["Executable"] = executable];
+
+	session = StartExternalSession[sessInfo];
 	If[FailureQ[session], Return @ $Failed];
 
 	safeEE[session, "import gym"];
