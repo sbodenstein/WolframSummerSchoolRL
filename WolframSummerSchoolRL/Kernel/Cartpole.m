@@ -47,8 +47,8 @@ CatchFailureAsMessage @ Scope[
 	done = boolLookup @ Round @ Last[update];
 	(* update state *)
 	$Environments[id] = <|"State" -> newState, "Done" -> done|>;
-
-	out = <|"Observation" -> newState, "Done" -> done, "Reward" -> 1|>;
+	reward = If[done, 0, 1];
+	out = <|"Observation" -> newState, "Done" -> done, "Reward" -> reward|>;
 	If[render, out["Rendering"] = cartRender[newState]];
 	out
 ]
