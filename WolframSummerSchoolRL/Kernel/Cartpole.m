@@ -47,8 +47,7 @@ CatchFailureAsMessage @ Scope[
 	done = boolLookup @ Round @ Last[update];
 	(* update state *)
 	$Environments[id] = <|"State" -> newState, "Done" -> done|>;
-	reward = If[done, 0, 1];
-	out = <|"Observation" -> newState, "Done" -> done, "Reward" -> reward|>;
+	out = <|"Observation" -> newState, "Done" -> done, "Reward" -> 1|>;
 	If[render, out["Rendering"] = cartRender[newState]];
 	out
 ]
@@ -153,6 +152,9 @@ cartRender[{x_, xdot_, t_, tdot_}] := Module[
 (* testing code to ensure this implementation matches openai gym *)
 PackageScope["testCartpole"]
 testCartpole[] := Scope[
+	$wenv = RLEnvironmentCreate["WLCartPole"];
+	$env = RLEnvironmentCreate["CartPole-v1"];
+
 	a = PlayRandomAgent[$env];
 	WolframSummerSchoolRL`PackageScope`RLEnvironmentStateSet[
 		$wenv,<|"State" -> a["InitialObservation"],"Done"->False|>
@@ -162,5 +164,7 @@ testCartpole[] := Scope[
 	test1 = (Total@a["Rewards"] == Total@wolf["Rewards"]);
 	test2 = (Max[Abs[a["Observations"] - wolf["Observations"]]] < 0.001);
 	test3 = (wolf["Done"] == True);
+	RLEnvironmentClose@$wenv;
+	RLEnvironmentClose@$env;
 	VectorQ[{test1, test2, test3}, TrueQ]
 ]
